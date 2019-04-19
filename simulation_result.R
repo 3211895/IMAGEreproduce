@@ -1,12 +1,47 @@
-
+#############power#################
 
 res=readRDS('./IMAGE.rds') ###results
-sortasm <- asm[order(asm$pvalue ), ] 
-loc=sortasm[,1]
+sortres <- res[order(res$pvalue ), ] 
+loc=sortres[,1]
 power=cal_Power(loc,fdr)
+pvalue=sortres[,5]
+
+############FDR control####################
+res=readRDS('./IMAGE.rds') ###results
+sortres <- res[order(res$pvalue ), ] 
+loc=sortres[,1]
+
+counts = matrix(nrow=0, ncol=2)
+i=1
+if(loc[i]>1000)
+{
+  counts <- rbind(counts, c( 0, 1))
+}else{
+  counts <- rbind(counts, c( 1, 0))
+}
+for(i in 2:10000)
+{
+  if(loc[i]>1000)
+  {
+    counts <- rbind(counts, c(counts[i-1, 1], counts[i-1, 2]+1))
+  }else{
+    counts <- rbind(counts, c(counts[i-1, 1]+1, counts[i-1, 2]))
+  }
+}
+
+FDR_true=numeric()
+for(i in 1:10000)
+{
+  FDR_true[i]=counts[i,2]/i
+}
 
 
+load('pnull.RData')  #######load permutation pvalues
 
+FDR_estimate=FDR(pvalue,pnull)
+
+FDR_true=FDR_true[1:length(which(FDR_true<0.2))]
+FDR_estimate=FDR_estimate[1:length(FDR_true)]
 
 
 
