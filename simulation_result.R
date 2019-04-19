@@ -38,7 +38,7 @@ for(i in 1:10000)
 
 load('pnull.RData')  #######load permutation pvalues
 
-FDR_estimate=FDR(pvalue,pnull)
+FDR_estimate=FDR(pvalue,pnull,10)
 
 FDR_true=FDR_true[1:length(which(FDR_true<0.2))]
 FDR_estimate=FDR_estimate[1:length(FDR_true)]
