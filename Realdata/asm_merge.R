@@ -226,7 +226,40 @@ SNPlist=SNPlist[-idx]
 chr=chr[-idx]
 N=nrow(genotypem)
 
-
+geno<-list()
+geno[[1]]<-matrix(0,ncol=N,nrow=67)
+geno[[2]]<-matrix(0,ncol=N,nrow=67)
+for(i in 1:N)
+{
+  for(j in 1:67)
+  {
+    if(is.na(genotypem[i,j]))
+    {
+      geno[[2]][j,i]=0/0
+      geno[[1]][j,i]=0/0
+    }else if(genotypem[i,j]==1){
+      geno[[2]][j,i]=1
+    }else if(genotypem[i,j]==2){
+      geno[[2]][j,i]=1
+      geno[[1]][j,i]=1
+    }
+  }
+}
+names(geno) <- c('hap1', 'hap2')
+data<-list()
+data[[1]]<-matrix(0,ncol=N,nrow=67)
+data[[2]]<-matrix(0,ncol=N,nrow=67)
+data[[3]]<-matrix(0,ncol=N,nrow=67)
+data[[4]]<-matrix(0,ncol=N,nrow=67)
+data[[5]]<-matrix(0,ncol=N,nrow=67)
+data[[6]]<-matrix(0,ncol=N,nrow=67)
+data[[1]]<-t(rm)
+data[[2]]<-t(ym)
+data[[3]]<-t(r1m)
+data[[4]]<-t(r2m)
+data[[5]]<-t(y1m)
+data[[6]]<-t(y2m)
+names(data) <- c('r', 'y', 'r1', 'r2', 'y1', 'y2')
 
 
 
