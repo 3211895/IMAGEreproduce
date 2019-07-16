@@ -26,8 +26,8 @@ SimuGeno<-function(n,m,genotype)
         geno2[j]=1
       }
     }
-    geno[[1]][,i]<-geno1
-    geno[[2]][,i]<-geno2
+    geno[[1]][,i]<-geno1 ### haplotype 1
+    geno[[2]][,i]<-geno2  ### haplotype 2
   }
   names(geno) <- c('hap1', 'hap2')
   return(geno)
@@ -95,13 +95,13 @@ SimuRead <- function(geno, m1, m2, NBsize, MeanTR, K=NULL,
   data[[1]] <- total
   data[[2]] <- 0
   
-  # r1
+  # r1 totol read counts from haplotype 2
   data[[3]] <- apply(total, 2, function(x) {
     qj <- rbeta(n=n, shape1=10, shape2=10)
     r1 <- sapply(x, function(r) rbinom(n=1, size=r, prob=qj))
     return(r1)
   })
-  #r2
+  #r2 totol read counts from haplotype 2
   data[[4]] <- total - data[[3]]
 
   if (EvenSP == TRUE) {
@@ -135,14 +135,14 @@ SimuRead <- function(geno, m1, m2, NBsize, MeanTR, K=NULL,
     return(c(mu, b*asm[i]))
   })
   
-  # y1
+  # y1 methylated read counts from haplotype 1
   data[[5]] <- sapply(1:m, function(i) {
     pi1 <- logistic( logit(mu) + g1[, i] * beta[2, i] + error[[1]][, i])
     return(sapply(1:n, function(j) {
       return(rbinom(1, data[[3]][j, i], pi1[j]))
     }) )
   })
-  # y2
+  # y2 methylated read counts from haplotype 2
   data[[6]] <- sapply(1:m, function(i) {
     pi2 <- logistic( logit(mu) + g2[, i] * beta[2, i] + error[[2]][, i])
     return(sapply(1:n, function(j) {
